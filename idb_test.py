@@ -9,11 +9,15 @@ app = Flask(__name__)
 # In-memory storage for the CSV data
 sales_data = None
 
+
+# This function handles api to the uploading of a CSV file by POST method 
+# then save the file into sales data csv.
 @app.route('/upload/', methods=['POST'])
 def upload_csv():
     global sales_data
     
-    print("file vinh " , request.files)
+    # Print the information of the uploaded file
+    print(request.files)
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
     
@@ -21,6 +25,7 @@ def upload_csv():
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
     
+    # Check the file format
     if not file.filename.endswith('.csv'):
         return jsonify({"error": "File must be a CSV"}), 400
     
@@ -28,14 +33,17 @@ def upload_csv():
         # Read the file content
         file_content = file.read()
         
-        # Convert to pandas DataFrame
+        # Convert the content to a pandas DataFrame
         sales_data = pd.read_csv(io.StringIO(file_content.decode('utf-8')))
         
-        # Convert date column to datetime
+        # Convert the date column to datetime format
         sales_data['date'] = pd.to_datetime(sales_data['date'])
         
         # Calculate total price
         sales_data['total_price'] = sales_data['quantity'] * sales_data['price']
+        
+        # Save the DataFrame to a CSV file
+        sales_data.to_csv('sales_data.csv', index=False)
         
         return jsonify({
             "message": "File uploaded successfully",
@@ -43,15 +51,24 @@ def upload_csv():
         }), 200
     
     except Exception as e:
-        print("Lỗi khi tải lên tệp:", str(e))
+        # Print the error if any
+        print("Error uploading file:", str(e))
         return jsonify({"error": str(e)}), 500
 
+# This function handles the retrieval of sales data based on query parameters.
 @app.route('/sales/', methods=['GET'])
 def get_sales():
     global sales_data
     
+    # check if there is any data available
     if sales_data is None:
-        return jsonify({"error": "No data available. Please upload a CSV file first."}), 400
+        #check if the sales_data.csv file exists
+        if not os.path.exists('sales_data.csv'):
+            return jsonify({"error": "No data available. Please upload a CSV file first."}), 400
+        else:
+            # If the file exists, read the data from the file
+            sales_data = pd.read_csv('sales_data.csv')
+            sales_data['date'] = pd.to_datetime(sales_data['date'])
     
     # Get query parameters
     start_date = request.args.get('start_date')

@@ -1,58 +1,58 @@
-# Hướng dẫn sử dụng ứng dụng Tải lên tệp CSV
+# User Guide for CSV File Upload Application
 
-## Giới thiệu
+## Introduction
 
-Ứng dụng này cho phép người dùng tải lên tệp CSV chứa dữ liệu bán hàng và thực hiện các truy vấn để lấy thông tin từ dữ liệu đã tải lên.
+This application allows users to upload a CSV file containing sales data and perform queries to retrieve information from the uploaded data.
 
-## Cài đặt
+## Installation
 
-1. Đảm bảo rằng bạn đã cài đặt Python và pip.
-2. Cài đặt các thư viện cần thiết bằng lệnh:
+1. Ensure that you have Python and pip installed.
+2. Install the required libraries using the following command:
    ```bash
    pip install Flask pandas
    ```
 
-## Chạy ứng dụng
+## Running the Application
 
-Để chạy ứng dụng, sử dụng lệnh sau trong terminal:
+To run the application, use the following command in the terminal:
 
 ```bash
 python idb_test.py
 ```
 
-Ứng dụng sẽ chạy trên `http://127.0.0.1:8000`.
+The application will run on `http://127.0.0.1:8000`.
 
-## Tải lên tệp CSV
+## Uploading a CSV File
 
-Để tải lên tệp CSV, bạn có thể sử dụng giao diện web hoặc gửi yêu cầu POST đến endpoint `/upload/` với tệp CSV.
+To upload a CSV file, you can use the web interface or send a POST request to the `/upload/` endpoint with the CSV file.
 
-### Ví dụ về yêu cầu POST
+### Example of a POST Request
 
-```http
+```
 POST /upload/
 Content-Type: multipart/form-data
 
-file: [tệp CSV]
+file: [CSV file]
 ```
 
-## Lấy dữ liệu bán hàng
+## Retrieving Sales Data
 
-Sau khi tải lên tệp CSV, bạn có thể lấy dữ liệu bằng cách gửi yêu cầu GET đến endpoint `/sales/` với các tham số truy vấn tùy chọn:
+After uploading the CSV file, you can retrieve the data by sending a GET request to the `/sales/` endpoint with optional query parameters for filtering:
 
-- `start_date`: Ngày bắt đầu (định dạng: YYYY-MM-DD)
-- `end_date`: Ngày kết thúc (định dạng: YYYY-MM-DD)
-- `region`: Khu vực
+- `start_date`: Start date (format: YYYY-MM-DD)
+- `end_date`: End date (format: YYYY-MM-DD)
+- `region`: Region
 
-### Ví dụ về yêu cầu GET
+### Example of a GET Request
 
-```http
-GET /sales/?start_date=2023-01-01&end_date=2023-12-31&region=Miền Bắc
+```
+GET /sales/?start_date=2023-01-01&end_date=2023-12-31&region=North
 ```
 
-## Phản hồi
+## Response
 
-Phản hồi từ các yêu cầu sẽ được trả về dưới dạng JSON, bao gồm thông tin về tổng doanh thu, doanh thu trung bình, số lượng giao dịch và các bản ghi phù hợp.
+Responses from the requests will be returned in JSON format, including information about total sales, average sales, transaction count, and matching records.
 
-## Lỗi
+## Errors
 
-Nếu có lỗi xảy ra trong quá trình tải lên tệp hoặc truy vấn dữ liệu, ứng dụng sẽ trả về mã lỗi và thông báo lỗi tương ứng.
+If an error occurs during file upload or data querying, the application will return an error code and the corresponding error message.
