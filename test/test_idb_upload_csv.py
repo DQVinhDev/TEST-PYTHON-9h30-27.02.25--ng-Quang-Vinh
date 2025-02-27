@@ -1,5 +1,5 @@
 import pytest
-from idb_test import app  # Change the filename if necessary
+from src.idb_upload_csv import app  # Change the filename if necessary
 
 @pytest.fixture
 def client():
@@ -8,7 +8,7 @@ def client():
 
 def test_upload_csv(client):
     # Test uploading a valid CSV file
-    with open('test_sales_data.csv', 'rb') as f:  # Create a sample CSV file for testing
+    with open('/test_sales_data.csv', 'rb') as f:  # Create a sample CSV file for testing
         response = client.post('/upload/', data={'file': f})
     assert response.status_code == 200
     assert b'File uploaded successfully' in response.data
