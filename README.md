@@ -17,7 +17,7 @@ This application allows users to upload a CSV file containing sales data and per
 To run the application, use the following command in the terminal:
 
 ```bash
-python idb_test.py
+python idb_upload_csv.py
 ```
 
 The application will run on `http://127.0.0.1:8000`.
@@ -56,3 +56,14 @@ Responses from the requests will be returned in JSON format, including informati
 ## Errors
 
 If an error occurs during file upload or data querying, the application will return an error code and the corresponding error message.
+
+## Unit Testing
+
+To ensure the application functions correctly, you can run unit tests. Follow these steps:
+
+1. Cd to the test folder `cd test`.
+2. Use the following command to run the tests:
+   ```bash
+   pytest test_idb_upload_csv.py
+   ```
+3. Ensure that your test cases cover various scenarios, including successful uploads and error handling.
