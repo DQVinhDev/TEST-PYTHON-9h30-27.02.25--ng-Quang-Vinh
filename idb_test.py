@@ -13,11 +13,11 @@ sales_data = None
 def upload_csv():
     global sales_data
     
+    print("file vinh " , request.files)
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
     
     file = request.files['file']
-    
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
     
@@ -43,6 +43,7 @@ def upload_csv():
         }), 200
     
     except Exception as e:
+        print("Lỗi khi tải lên tệp:", str(e))
         return jsonify({"error": str(e)}), 500
 
 @app.route('/sales/', methods=['GET'])
@@ -95,8 +96,8 @@ def get_sales():
     filtered_data['date'] = filtered_data['date'].dt.strftime('%Y-%m-%d')
     
     return jsonify({
-        "total_sales": total_sales,
-        "average_sales": average_sales,
+        "total_sales": int(total_sales),
+        "average_sales": float(average_sales),
         "transaction_count": transaction_count,
         "matching_records": filtered_data.to_dict('records')
     }), 200
