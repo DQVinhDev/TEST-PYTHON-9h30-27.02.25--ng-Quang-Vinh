@@ -17,7 +17,8 @@ This application allows users to upload a CSV file containing sales data and per
 To run the application, use the following command in the terminal:
 
 ```bash
-python idb_upload_csv.py
+cd src
+python app.py
 ```
 
 The application will run on `http://127.0.0.1:8000`.
