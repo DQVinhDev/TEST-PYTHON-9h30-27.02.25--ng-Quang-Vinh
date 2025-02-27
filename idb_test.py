@@ -75,6 +75,10 @@ def get_sales():
     end_date = request.args.get('end_date')
     region = request.args.get('region')
     
+    # Get query parameters for pagination
+    page = request.args.get('page', default=1, type=int)
+    page_size = request.args.get('page_size', default=10, type=int)
+    
     # Create a copy of the data for filtering
     filtered_data = sales_data.copy()
     
@@ -112,11 +116,21 @@ def get_sales():
     # Convert dates to string for JSON serialization
     filtered_data['date'] = filtered_data['date'].dt.strftime('%Y-%m-%d')
     
+    # Calculate start and end indices for pagination
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
+    
+    # Get filtered data and apply pagination
+    paginated_data = filtered_data.iloc[start_index:end_index]
+    
     return jsonify({
         "total_sales": int(total_sales),
         "average_sales": float(average_sales),
         "transaction_count": transaction_count,
-        "matching_records": filtered_data.to_dict('records')
+        "matching_records": paginated_data.to_dict('records'),
+        "page": page,
+        "page_size": page_size,
+        "total_pages": (len(filtered_data) + page_size - 1) // page_size
     }), 200
 
 if __name__ == '__main__':
